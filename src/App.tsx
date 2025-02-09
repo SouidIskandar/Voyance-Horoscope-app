@@ -3,24 +3,40 @@ import { useState } from 'react';
 import { ZodiacGrid } from './components/ZodiacGrid';
 import { HoroscopePage } from './components/HoroscopePage';
 import { ElementPage } from './components/ElementPage';
-import { zodiacSigns } from './data/zodiacSigns';
+
+const zodiacSigns = [
+  { name: "Aries", startDate: "03/21", endDate: "04/19" },
+  { name: "Taurus", startDate: "04/20", endDate: "05/20" },
+  { name: "Gemini", startDate: "05/21", endDate: "06/20" },
+  { name: "Cancer", startDate: "06/21", endDate: "07/22" },
+  { name: "Leo", startDate: "07/23", endDate: "08/22" },
+  { name: "Virgo", startDate: "08/23", endDate: "09/22" },
+  { name: "Libra", startDate: "09/23", endDate: "10/22" },
+  { name: "Scorpio", startDate: "10/23", endDate: "11/21" },
+  { name: "Sagittarius", startDate: "11/22", endDate: "12/21" },
+  { name: "Capricorn", startDate: "12/22", endDate: "01/19" },
+  { name: "Aquarius", startDate: "01/20", endDate: "02/18" },
+  { name: "Pisces", startDate: "02/19", endDate: "03/20" },
+];
 
 function HomePage() {
   const [birthDate, setBirthDate] = useState('');
   const navigate = useNavigate();
 
   const findZodiacSign = (date) => {
+    if (!date) return null;
+
     const birth = new Date(date);
     const day = birth.getDate();
-    const month = birth.getMonth() + 1;
+    const month = birth.getMonth() + 1; // Les mois en JavaScript commencent à 0, donc +1
 
-    return zodiacSigns.find((sign) => {
-      const [startMonth, startDay] = sign.startDate.split('/').map(Number);
-      const [endMonth, endDay] = sign.endDate.split('/').map(Number);
+    return zodiacSigns.find(({ startDate, endDate }) => {
+      const [startMonth, startDay] = startDate.split('/').map(Number);
+      const [endMonth, endDay] = endDate.split('/').map(Number);
 
       return (
-        (month === startMonth && day >= startDay) ||
-        (month === endMonth && day <= endDay)
+        (month === startMonth && day >= startDay) || // Début du signe
+        (month === endMonth && day <= endDay) // Fin du signe
       );
     });
   };
